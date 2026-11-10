@@ -14,9 +14,11 @@ npm run lint       # ESLint + checagem de tipos
 Stack: Next.js 16 (App Router) + TypeScript + CSS puro (`src/app/globals.css`).
 
 ### Publicação, SEO e 404
-- **Endereço do site:** defina `NEXT_PUBLIC_SITE_URL` com o endereço final antes do build (ex.: `NEXT_PUBLIC_SITE_URL=https://seu-dominio.com npm run build`). Sem ela, o canônico, o `sitemap.xml`, o `robots.txt` e a imagem de compartilhamento apontam para `http://localhost:3000`.
-- **Metadados:** título com modelo `%s · PykeGap#ggwp · Mono Pyke`, descrição, Open Graph e Twitter card (`src/app/layout.tsx`, `src/lib/site.ts`).
-- **Rotas geradas:** `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`, `/favicon.ico`, `/icon.png`, `/apple-icon.png` e `/opengraph-image.jpg` (splash padrão 1200×630).
+- **Domínio:** `https://monopyke.com.br` é o endereço canônico (`src/lib/site.ts`). `www.monopyke.com.br` responde com redirecionamento permanente (308) para ele (`next.config.ts`), então os dois domínios precisam apontar para o mesmo deploy. O build de produção já usa esse domínio no canônico, `sitemap.xml`, `robots.txt`, JSON-LD e imagem de compartilhamento; `npm run dev` usa `http://localhost:3000`. Para outro endereço (ex.: homologação), defina `NEXT_PUBLIC_SITE_URL` antes do build.
+- **Search Console:** defina `GOOGLE_SITE_VERIFICATION` com o token da meta tag do Google para gerar `<meta name="google-site-verification">`; depois envie `https://monopyke.com.br/sitemap.xml` no painel.
+- **Cabeçalhos:** HSTS (sem `includeSubDomains`), `nosniff`, `Referrer-Policy`, `X-Frame-Options: SAMEORIGIN`, `Permissions-Policy` e cache de 7 dias para `/images`, `/audio` e ícones.
+- **Metadados:** título com modelo `%s · PykeGap#ggwp · Mono Pyke`, descrição, Open Graph, Twitter card, `robots` (indexar, prévia de imagem grande) palavras-chave (`SITE_KEYWORDS` em `src/lib/site.ts`) e dados estruturados JSON-LD (`WebSite` com nomes alternativos, `ProfilePage`, `Person` com o Riot ID como identificador e o Pyke como tema) em `src/app/layout.tsx`.
+- **Rotas geradas:** `/sitemap.xml` (com imagens e data do build), `/robots.txt` (bloqueia `/_next/image` e `/api/`), `/manifest.webmanifest`, `/favicon.ico`, `/icon.png`, `/apple-icon.png` e `/opengraph-image.jpg` (splash padrão 1200×630).
 - **Página 404:** `src/app/not-found.tsx`, com status 404, `noindex` e sem canônico.
 
 ## Estrutura
